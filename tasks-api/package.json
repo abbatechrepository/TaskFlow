@@ -2,7 +2,7 @@
   "name": "tasks-api",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Felipe Almeida <felipe@abbatech.dev.br>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
