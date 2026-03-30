@@ -90,7 +90,7 @@ CI/CD com GitHub Actions
 Pull requests são bem-vindos. Para mudanças maiores, abra uma issue antes.
 
 📄 Licença
-Este projeto ainda não possui licença.
+Este projeto não está licenciado para uso público.
 
 =======================================================================================================================================================================================================================
 🇺🇸 English
@@ -158,4 +158,4 @@ Deployment
 CI/CD
 
 📄 License
-Not yet
+This project is not licensed for public use.
