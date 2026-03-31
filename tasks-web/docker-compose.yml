@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  tasks-web:
+    build: .
+    container_name: tasks-web
+    environment:
+      NEXT_PUBLIC_API_URL: http://host.docker.internal:3001
+    ports:
+      - "3000:3000"

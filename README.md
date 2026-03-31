@@ -92,6 +92,16 @@ Pull requests são bem-vindos. Para mudanças maiores, abra uma issue antes.
 📄 Licença
 Este projeto não está licenciado para uso público.
 
+Executar utilizando Docker e Docker Compose
+Iniciar Docker atraves do Docker Desktop
+cd tasks-api
+docker-compose up --build
+
+cd tasks-web
+docker-compose up --build
+
+acessar em:
+
 =======================================================================================================================================================================================================================
 🇺🇸 English
 =======================================================================================================================================================================================================================
