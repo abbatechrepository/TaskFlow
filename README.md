@@ -94,13 +94,11 @@ Este projeto não está licenciado para uso público.
 
 Executar utilizando Docker e Docker Compose
 Iniciar Docker atraves do Docker Desktop
-cd tasks-api
-docker-compose up --build
 
-cd tasks-web
 docker-compose up --build
 
 acessar em:
+http://localhost:3000
 
 =======================================================================================================================================================================================================================
 🇺🇸 English
