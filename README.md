@@ -92,6 +92,14 @@ Pull requests são bem-vindos. Para mudanças maiores, abra uma issue antes.
 📄 Licença
 Este projeto não está licenciado para uso público.
 
+Executar utilizando Docker e Docker Compose
+Iniciar Docker atraves do Docker Desktop
+
+docker-compose up --build
+
+acessar em:
+http://localhost:3000
+
 =======================================================================================================================================================================================================================
 🇺🇸 English
 =======================================================================================================================================================================================================================

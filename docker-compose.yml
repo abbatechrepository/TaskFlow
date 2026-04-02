@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: tasks
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  nest-api:
+    build: ./tasks-api   # <- ajuste aqui se necessário
+    container_name: nest-api
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mysql://root:@mysql-db:3306/tasks
+    ports:
+      - "3001:3001"
+    restart: always
+
+  tasks-web:
+    build: ./tasks-web   # <- ajuste aqui se necessário
+    container_name: tasks-web
+    depends_on:
+      - nest-api
+    environment:
+      NEXT_PUBLIC_API_URL: http://nest-api:3001
+    ports:
+      - "3000:3000"
