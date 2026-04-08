@@ -16,8 +16,12 @@ services:
       retries: 10
 
   nest-api:
-    build: ./tasks-api   # <- ajuste aqui se necessário
+    build: ./tasks-api
     container_name: nest-api
+    volumes:
+      - ./tasks-api:/app
+      - /app/node_modules
+    working_dir: /app
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -28,8 +32,12 @@ services:
     restart: always
 
   tasks-web:
-    build: ./tasks-web   # <- ajuste aqui se necessário
+    build: ./tasks-web
     container_name: tasks-web
+    volumes:
+      - ./tasks-web:/app
+      - /app/node_modules
+    working_dir: /app
     depends_on:
       - nest-api
     environment:
