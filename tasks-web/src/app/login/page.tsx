@@ -265,9 +265,9 @@ export default function LoginPage() {
         {/* FOOTER */}
         <p className="text-center mt-8 text-indigo-100/40 text-xs font-medium">
           Esqueceu sua senha?{' '}
-          <span className="text-white hover:underline cursor-pointer">
+          <a href="/recover-password" className="text-white hover:underline">
             Recuperar acesso
-          </span>
+          </a>
         </p>
 
       </div>

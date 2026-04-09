@@ -54,6 +54,7 @@ export class AuthService {
 
   async recoverPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
+
     if (user) {
       const token = Math.random().toString(36).substring(2, 15);
       const expires = new Date();
