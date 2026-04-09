@@ -9,6 +9,9 @@ services:
       MYSQL_DATABASE: tasks
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
@@ -24,8 +27,13 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: mysql://root:@mysql-db:3306/tasks
+      CHOKIDAR_USEPOLLING: "true"
     ports:
       - "3001:3001"
+    volumes:
+      - ./tasks-api:/app
+      - node_modules:/app/node_modules
+    command: sh -c "npm install && npx prisma generate && npx prisma db push && npm run start:dev"
     restart: always
 
   tasks-web:
@@ -41,3 +49,8 @@ services:
       NEXT_PUBLIC_API_URL: http://nest-api:3001
     ports:
       - "3000:3000"
+    restart: always
+
+volumes:
+  mysql_data:
+  node_modules:
