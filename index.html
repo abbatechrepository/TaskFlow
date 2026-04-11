@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABBATECH - Desenvolvimento de Sistemas Web</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: #0A0F1C;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #1E3A8A, #22D3EE);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(34,211,238,0.2);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #22D3EE;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #1E3A8A, #22D3EE);
+    }
+
+  </style>
+</head>
+
+<body class="text-white font-sans">
+
+<!-- EM CONSTRUÇÃO -->
+<section class="h-screen flex flex-col justify-center items-center text-center px-6" style="height: 50vh !important;">
+  <svg width="400" height="400" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="16" y="18" width="96" height="76" rx="10" stroke="#1F2937" stroke-width="6"/>
+    <path d="M16 36H112" stroke="#1F2937" stroke-width="6"/>
+    <circle cx="28" cy="27" r="3.5" fill="#60A5FA"/>
+    <circle cx="40" cy="27" r="3.5" fill="#34D399"/>
+    <circle cx="52" cy="27" r="3.5" fill="#FBBF24"/>
+
+    <path d="M42 62L32 70L42 78" stroke="#2563EB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M58 62L68 70L58 78" stroke="#2563EB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <circle cx="86" cy="70" r="12" stroke="#F59E0B" stroke-width="5"/>
+    <path d="M86 52V58M86 82V88M68 70H74M98 70H104M74 58L78 62M94 78L98 82M74 82L78 78M94 62L98 58"
+          stroke="#F59E0B" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+  <h1 class="text-4xl md:text-6xl font-bold leading-tight">
+    Em <span class="gradient-text">construção...</span>
+  </h1>
+</section>
+
+<!-- HERO -->
+<section class="h-screen flex flex-col justify-center items-center text-center px-6">
+
+  <h1 class="text-4xl md:text-6xl font-bold leading-tight">
+    Sistemas web <span class="gradient-text">robustos</span><br>
+    que escalam seu negócio
+  </h1>
+
+  <p class="mt-6 text-gray-400 max-w-xl">
+    Desenvolvemos plataformas digitais de alta performance com foco em estabilidade, segurança e conversão.
+  </p>
+
+  <a href="#contato" class="btn-primary mt-8 px-8 py-4 rounded-lg font-semibold hover:opacity-90">
+    Solicitar orçamento
+  </a>
+
+</section>
+
+<!-- SERVIÇOS -->
+<section class="py-20 px-6 max-w-6xl mx-auto">
+
+  <h2 class="text-3xl font-bold text-center mb-12">Serviços</h2>
+
+  <div class="grid md:grid-cols-3 gap-8">
+
+    <div class="card p-6 rounded-lg">
+      <h3 class="text-xl font-semibold mb-2">Sistemas Web</h3>
+      <p class="text-gray-400">Aplicações escaláveis e seguras com arquitetura moderna.</p>
+    </div>
+
+    <div class="card p-6 rounded-lg">
+      <h3 class="text-xl font-semibold mb-2">Sites de Alta Performance</h3>
+      <p class="text-gray-400">SEO, velocidade e experiência otimizadas.</p>
+    </div>
+
+    <div class="card p-6 rounded-lg">
+      <h3 class="text-xl font-semibold mb-2">Integrações</h3>
+      <p class="text-gray-400">APIs robustas e integrações com sistemas externos.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- TECNOLOGIAS -->
+<section class="py-20 px-6 text-center">
+
+  <h2 class="text-3xl font-bold mb-8">Tecnologias</h2>
+
+  <p class="text-gray-400">
+    Next.js • React • Node.js • NestJS • Docker • AWS
+  </p>
+
+</section>
+
+<!-- CTA FINAL -->
+<section id="contato" class="py-20 px-6 text-center">
+
+  <h2 class="text-3xl font-bold mb-4">Vamos construir algo sólido?</h2>
+
+  <p class="text-gray-400 mb-8">
+    Entre em contato e receba uma proposta personalizada.
+  </p>
+
+  <a href="mailto:contato@abbatech.dev.br"
+     class="btn-primary px-8 py-4 rounded-lg font-semibold hover:opacity-90">
+    Falar com especialista
+  </a>
+
+</section>
+
+</body>
+</html>
