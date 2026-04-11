@@ -69,7 +69,11 @@ export class TasksService {
       developers.forEach((d) => devMap.set(d.name, 0));
 
       tasks.forEach((task) => {
+<<<<<<< Updated upstream
         task.assignees.forEach((assignment) => {
+=======
+        task.assignees.forEach((assignment: any) => {
+>>>>>>> Stashed changes
           const developer = assignment.user.name;
 
           if (devMap.has(developer)) {

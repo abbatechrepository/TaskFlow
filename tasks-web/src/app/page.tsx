@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api, { API_BASE_URL } from '@/lib/api';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
@@ -11,6 +11,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,10 +35,14 @@ export default function Dashboard() {
         api.get('/tasks/dashboard'),
         api.get('/tasks'),
       ]);
-      setStats(statsRes.data);
-      setTasks(tasksRes.data);
+      setStats(statsRes.data ?? null);
+      setTasks(Array.isArray(tasksRes.data) ? tasksRes.data : []);
+      setLoadError('');
     } catch (err) {
       console.error('Error fetching data', err);
+      setStats(null);
+      setTasks([]);
+      setLoadError('Nao foi possivel carregar o dashboard agora.');
     } finally {
       setLoading(false);
     }
@@ -47,7 +52,7 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem('token');
 
-      const res = await fetch('http://localhost:3001/api/users/select', {
+      const res = await fetch(`${API_BASE_URL}/users/select`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,8 +69,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const user = localStorage.getItem('user');
-    if (!user) {
-      router.push('/login');
+    const token = localStorage.getItem('token');
+
+    if (!user || !token) {
+      setLoading(false);
+      router.replace('/login');
       return;
     }
 
@@ -75,19 +83,23 @@ export default function Dashboard() {
 
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
-      const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const title = typeof task?.title === 'string' ? task.title : '';
+      const status = typeof task?.status === 'string' ? task.status : '';
+      const developers = Array.isArray(task?.developer)
+        ? task.developer.filter((dev: unknown): dev is string => typeof dev === 'string')
+        : typeof task?.developer === 'string'
+          ? [task.developer]
+          : [];
 
+      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
         filterStatus === 'Todos status' ||
         (filterStatus === 'Atrasada' && isOverdue(task)) ||
-        task.status === filterStatus;
+        status === filterStatus;
 
       const matchesDev =
         filterDev === 'Todos devs' ||
-        (Array.isArray(task.developer)
-          ? task.developer.includes(filterDev)
-          : task.developer === filterDev);
-
+        developers.includes(filterDev);
       return matchesSearch && matchesStatus && matchesDev;
     });
   }, [tasks, searchTerm, filterStatus, filterDev]);
@@ -156,6 +168,27 @@ export default function Dashboard() {
     </div>
   );
 
+  if (loadError) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="card max-w-md w-full text-center space-y-3">
+          <h2 className="text-lg font-black text-white">Erro ao abrir o painel</h2>
+          <p className="text-sm text-slate-400">{loadError}</p>
+          <Button onClick={() => {
+            setLoading(true);
+            fetchData();
+          }}>
+            Tentar novamente
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return null;
+  }
+
   return (
     <div className="space-y-8 pb-20 animate-fade-in">
       {/* KPI Cards */}
@@ -190,7 +223,7 @@ export default function Dashboard() {
               👤 Developers
             </h3>
             <div className="space-y-4">
-              {stats?.devs?.map((dev: any) => (
+              {(Array.isArray(stats?.devs) ? stats.devs : []).map((dev: any) => (
                 <div key={dev.developer} className="flex justify-between items-center group cursor-pointer" onClick={() => setFilterDev(dev.developer)}>
                   <span className="text-sm font-bold text-slate-300 group-hover:text-white">{dev.developer}</span>
                   <span className="bg-white/5 px-2 py-0.5 rounded text-[10px] font-black text-blue-400">{dev.total}</span>
@@ -238,7 +271,7 @@ export default function Dashboard() {
                  >
                    Todos devs
                  </button>
-                 {stats?.devs?.map((dev: any) => (
+                 {(Array.isArray(stats?.devs) ? stats.devs : []).map((dev: any) => (
                    <button
                      key={dev.developer}
                      onClick={() => setFilterDev(dev.developer === filterDev ? 'Todos devs' : dev.developer)}
@@ -258,12 +291,12 @@ export default function Dashboard() {
                   onClick={() => handleOpenModal(task)}
                   className={`card ${task.status === 'URGENTE' ? 'urgent-border' : ''}`}
                 >
-                  <h4 style={{ fontWeight: 700, color: task.status === 'URGENTE' ? '#ff4d4d' : 'white', marginBottom: 4, textTransform: 'uppercase', fontSize: 13 }}>{task.title}</h4>
+                  <h4 style={{ fontWeight: 700, color: task.status === 'URGENTE' ? '#ff4d4d' : 'white', marginBottom: 4, textTransform: 'uppercase', fontSize: 13 }}>{task.title || 'Sem titulo'}</h4>
                   <p style={{ fontSize: 12, color: '#64748b', marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{task.description || '...'}</p>
 
                   <div className="status">
                     <div className="status-dot" style={{ background: isOverdue(task) ? '#ef4444' : task.status === 'Concluída' ? '#22c55e' : task.status === 'URGENTE' ? '#ef4444' : '#f59e0b' }}></div>
-                    <span style={{ color: isOverdue(task) ? '#ff4d4d' : '#94a3b8' }}>{isOverdue(task) ? 'ATRASADA' : task.status}</span>
+                    <span style={{ color: isOverdue(task) ? '#ff4d4d' : '#94a3b8' }}>{isOverdue(task) ? 'ATRASADA' : task.status || 'Sem status'}</span>
                     {task.due_date && <span style={{ color: '#475569', marginLeft: 'auto' }}>{new Date(task.due_date).toLocaleDateString('pt-BR')}</span>}
                     {task.developer && (
                       <span style={{ color: '#3b82f6', fontWeight: 700, fontSize: 11 }}>
