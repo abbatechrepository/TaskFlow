@@ -23,7 +23,7 @@ export default function Dashboard() {
     description: '',
     status: 'Aguardando aceitação',
     due_date: '',
-    developer: '',
+    assigneeIds: [] as number[],
   });
 
   const router = useRouter();
@@ -62,33 +62,32 @@ export default function Dashboard() {
     }
   };
 
-  // useEffect(() => {
-  //   const user = localStorage.getItem('user');
-  //   if (!user) {
-  //     router.push('/login');
-  //     return;
-  //   }
-  //   fetchData();
-  // }, [router]);
-
   useEffect(() => {
-  const user = localStorage.getItem('user');
-  if (!user) {
-    router.push('/login');
-    return;
-  }
+    const user = localStorage.getItem('user');
+    if (!user) {
+      router.push('/login');
+      return;
+    }
 
-  fetchData();
-  fetchUsers();
-}, [router]);
+    fetchData();
+    fetchUsers();
+  }, [router]);
 
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
       const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = filterStatus === 'Todos status' ||
-                            (filterStatus === 'Atrasada' && isOverdue(task)) ||
-                            task.status === filterStatus;
-      const matchesDev = filterDev === 'Todos devs' || task.developer === filterDev;
+
+      const matchesStatus =
+        filterStatus === 'Todos status' ||
+        (filterStatus === 'Atrasada' && isOverdue(task)) ||
+        task.status === filterStatus;
+
+      const matchesDev =
+        filterDev === 'Todos devs' ||
+        (Array.isArray(task.developer)
+          ? task.developer.includes(filterDev)
+          : task.developer === filterDev);
+
       return matchesSearch && matchesStatus && matchesDev;
     });
   }, [tasks, searchTerm, filterStatus, filterDev]);
@@ -106,7 +105,9 @@ export default function Dashboard() {
         description: task.description,
         status: task.status,
         due_date: task.due_date ? new Date(task.due_date).toISOString().split('T')[0] : '',
-        developer: task.developer || '',
+        assigneeIds: Array.isArray(task.assigneeIds)
+          ? task.assigneeIds.map((id: number | string) => Number(id))
+          : [],
       });
     } else {
       setEditingTask(null);
@@ -115,7 +116,7 @@ export default function Dashboard() {
         description: '',
         status: 'Aguardando aceitação',
         due_date: '',
-        developer: '',
+        assigneeIds: [],
       });
     }
     setIsModalOpen(true);
@@ -264,7 +265,11 @@ export default function Dashboard() {
                     <div className="status-dot" style={{ background: isOverdue(task) ? '#ef4444' : task.status === 'Concluída' ? '#22c55e' : task.status === 'URGENTE' ? '#ef4444' : '#f59e0b' }}></div>
                     <span style={{ color: isOverdue(task) ? '#ff4d4d' : '#94a3b8' }}>{isOverdue(task) ? 'ATRASADA' : task.status}</span>
                     {task.due_date && <span style={{ color: '#475569', marginLeft: 'auto' }}>{new Date(task.due_date).toLocaleDateString('pt-BR')}</span>}
-                    {task.developer && <span style={{ color: '#3b82f6', fontWeight: 700, fontSize: 11 }}>{task.developer}</span>}
+                    {task.developer && (
+                      <span style={{ color: '#3b82f6', fontWeight: 700, fontSize: 11 }}>
+                        {Array.isArray(task.developer) ? task.developer.join(', ') : task.developer}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -325,27 +330,30 @@ export default function Dashboard() {
               onChange={e => setFormData({...formData, due_date: e.target.value})}
             />
           </div>
-          {/* <Input
-            label="Responsável"
-            placeholder="Nome do dev"
-            className="bg-slate-800/50 border-white/5 text-white"
-            value={formData.developer}
-            onChange={e => setFormData({...formData, developer: e.target.value})}
-          /> */}
           <div className="space-y-1">
             <label className="block text-xs font-black text-slate-400 uppercase tracking-widest">
               Responsável
             </label>
+            <p className="text-[11px] text-slate-500">
+              Segure Ctrl (Windows) ou Cmd (Mac) para selecionar mais de um responsável.
+            </p>
 
             <select
-              className="input bg-slate-800/50 border-white/5 text-white"
-              value={formData.developer}
-              onChange={e => setFormData({ ...formData, developer: e.target.value })}
+              multiple
+              className="input bg-slate-800/50 border-white/5 text-white min-h-[120px]"
+              value={formData.assigneeIds.map(String)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  assigneeIds: Array.from(
+                    e.target.selectedOptions,
+                    (option) => Number(option.value),
+                  ),
+                })
+              }
             >
-              <option value="">Selecione um responsável</option>
-
               {users.map((u) => (
-                <option key={u.id} value={u.name}>
+                <option key={u.id} value={u.id}>
                   {u.name}
                 </option>
               ))}

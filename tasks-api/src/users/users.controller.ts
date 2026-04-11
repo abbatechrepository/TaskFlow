@@ -9,50 +9,56 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  private checkAdmin(req: any) {
-    const isAdmin = req.user?.roles?.includes('Admin');
+  private async checkAdmin(req: any) {
+    const isAdmin = await this.usersService.isAdmin(req.user?.userId);
     if (!isAdmin) {
       throw new ForbiddenException('Acesso restrito a administradores');
     }
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Get('me')
+  async me(@Req() req) {
+    return this.usersService.findSessionUser(req.user.userId);
+  }
+
   // 🔥 LISTAR USUÁRIOS (só admin)
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  findAll(@Req() req) {
-    this.checkAdmin(req);
+  async findAll(@Req() req) {
+    await this.checkAdmin(req);
     return this.usersService.findAll();
   }
 
   // 🔥 LISTAR ROLES (só admin)
   @UseGuards(AuthGuard('jwt'))
   @Get('roles')
-  findRoles(@Req() req) {
-    this.checkAdmin(req);
+  async findRoles(@Req() req) {
+    await this.checkAdmin(req);
     return this.usersService.findRoles();
   }
 
   // 🔥 CRIAR USUÁRIO (só admin)
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Req() req, @Body() createUserDto: any) {
-    this.checkAdmin(req);
+  async create(@Req() req, @Body() createUserDto: any) {
+    await this.checkAdmin(req);
     return this.usersService.create(createUserDto);
   }
 
   // 🔥 ATUALIZAR (só admin)
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(@Req() req, @Param('id') id: string, @Body() updateUserDto: any) {
-    this.checkAdmin(req);
+  async update(@Req() req, @Param('id') id: string, @Body() updateUserDto: any) {
+    await this.checkAdmin(req);
     return this.usersService.update(+id, updateUserDto);
   }
 
   // 🔥 DELETAR (só admin)
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Req() req, @Param('id') id: string) {
-    this.checkAdmin(req);
+  async remove(@Req() req, @Param('id') id: string) {
+    await this.checkAdmin(req);
     return this.usersService.remove(+id);
   }
 
