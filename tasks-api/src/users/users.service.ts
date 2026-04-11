@@ -6,6 +6,47 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  async findSessionUser(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        roles: {
+          include: {
+            role: {
+              include: {
+                permissions: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      roles: user.roles.map((r) => r.role.name),
+      permissions: user.roles.flatMap((r) => r.role.permissions.map((p) => p.permission)),
+    };
+  }
+
+  async isAdmin(userId: number) {
+    const total = await this.prisma.userRole.count({
+      where: {
+        user_id: userId,
+        role: {
+          name: 'Admin',
+        },
+      },
+    });
+
+    return total > 0;
+  }
+
   async findAll() {
     return this.prisma.user.findMany({
       select: {
