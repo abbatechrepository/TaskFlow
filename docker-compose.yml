@@ -33,7 +33,7 @@ services:
     volumes:
       - ./tasks-api:/app
       - node_modules:/app/node_modules
-    command: sh -c "npm install && npx prisma generate && npx prisma db push && npm run start:dev"
+    command: sh -c "npm install && npx prisma generate && npx prisma db push --accept-data-loss && npm run start:dev"
     restart: always
 
   tasks-web:
@@ -47,7 +47,7 @@ services:
     depends_on:
       - nest-api
     environment:
-      NEXT_PUBLIC_API_URL: http://nest-api:3001
+      NEXT_PUBLIC_API_URL: http://nest-api:3001/api/
     ports:
       - "3000:3000"
     command: sh -c "npm install && npm run dev"
