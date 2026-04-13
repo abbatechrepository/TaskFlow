@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import api from '@/lib/api';
-import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal';
 
 export default function UsersPage() {
@@ -305,14 +304,15 @@ export default function UsersPage() {
           <div className="flex gap-3 pt-4 border-t border-white/5">
             <button
               type="submit"
-              className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl transition-all"
+              className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
+              style={{ cursor: 'pointer'}}
             >
               {editingUser ? 'Salvar Alterações' : 'Criar Usuário'}
             </button>
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold rounded-xl transition-all"
+              style={{ padding: '8px 16px', background: '#1e293b', border: '1px solid #334155', borderRadius: 6, color: '#94a3b8', cursor: 'pointer', fontWeight: 600 }}
             >
               Cancelar
             </button>
