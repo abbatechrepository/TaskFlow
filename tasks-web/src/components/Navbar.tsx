@@ -90,14 +90,10 @@ export const Navbar: React.FC = () => {
           {isAdmin && (
             <Link
               href="/admin/users"
-              className={`
-                px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all
-                ${pathname === '/admin/users'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/40'
-                  : 'bg-white/5 text-gray-300 hover:bg-white/10'}
-              `}
+              className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20"
+              style={{ fontWeight: 700, fontSize: 14 }}
             >
-              👥 Gerenciar Usuários
+              Gerenciar Usuários
             </Link>
           )}
 
