@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
-import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
 
@@ -196,9 +195,14 @@ export default function Dashboard() {
         <div className="lg:col-span-8 space-y-6">
            <div className="flex justify-between items-center">
              <h2 className="text-2xl font-black text-white">Tarefas</h2>
-             <Button onClick={() => handleOpenModal()} className="bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/20 px-6">
+             <button
+               type="button"
+               onClick={() => handleOpenModal()}
+               className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
+               style={{ fontWeight: 700, fontSize: 14 }}
+             >
                + Nova
-             </Button>
+             </button>
            </div>
 
            {/* Filters & Search */}
@@ -353,9 +357,9 @@ export default function Dashboard() {
           </div>
 
           <div style={{ display: 'flex', gap: 12, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 8 }}>
-            <button type="submit" className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20" style={{ flex: 1, fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>Salvar Alterações</button>
+            <button type="submit" className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20" style={{ flex: 1, fontWeight: 700, fontSize: 14 }}>Salvar Alterações</button>
             {editingTask && (
-              <button type="button" className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 rounded-lg text-xs font-black transition-all" onClick={handleDelete} style={{ fontWeight: 700, fontSize: 14 , cursor: 'pointer'}}>Excluir</button>
+              <button type="button" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl transition-all text-sm font-bold border border-red-500/20" onClick={handleDelete} style={{ fontWeight: 700, fontSize: 14 }}>Excluir</button>
             )}
             <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '8px 16px', background: '#1e293b', border: '1px solid #334155', borderRadius: 6, color: '#94a3b8', cursor: 'pointer', fontWeight: 600 }}>Cancelar</button>
           </div>

@@ -145,10 +145,12 @@ export default function UsersPage() {
           <h1 className="text-4xl font-black text-white leading-none">Usuários</h1>
         </div>
         <button
+          type="button"
           onClick={openCreateModal}
-          className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl transition-all shadow-xl shadow-blue-900/20"
+          className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
+          style={{ fontWeight: 700, fontSize: 14 }}
         >
-          <span className="text-xl">+</span> Novo Usuário
+          + Novo Usuário
         </button>
       </header>
 
@@ -199,6 +201,7 @@ export default function UsersPage() {
                       type="button"
                       onClick={() => openEditModal(user)}
                       className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
+                      style={{ fontWeight: 700, fontSize: 14 }}
                     >
                       Editar
                     </button>
@@ -206,6 +209,7 @@ export default function UsersPage() {
                       type="button"
                       onClick={() => handleDelete(user.id)}
                       className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl transition-all text-sm font-bold border border-red-500/20"
+                      style={{ fontWeight: 700, fontSize: 14 }}
                     >
                       Excluir
                     </button>
@@ -304,15 +308,16 @@ export default function UsersPage() {
           <div className="flex gap-3 pt-4 border-t border-white/5">
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
-              style={{ cursor: 'pointer'}}
+              className="flex-1 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
+              style={{ fontWeight: 700, fontSize: 14 }}
             >
               {editingUser ? 'Salvar Alterações' : 'Criar Usuário'}
             </button>
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              style={{ padding: '8px 16px', background: '#1e293b', border: '1px solid #334155', borderRadius: 6, color: '#94a3b8', cursor: 'pointer', fontWeight: 600 }}
+              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-xl transition-all border border-slate-600"
+              style={{ fontWeight: 700, fontSize: 14 }}
             >
               Cancelar
             </button>
