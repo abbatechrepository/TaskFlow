@@ -55,7 +55,8 @@ export default function LoginPage() {
         {/* HEADER */}
         <div className="text-center mb-10">
           <div className="inline-block p-4 bg-white/10 rounded-2xl mb-4 backdrop-blur-sm border border-white/20">
-            <span className="text-4xl">🚀</span>
+            {/* <span className="text-4xl">🚀</span> */}
+            <img src="/taskflow/logov2.png" alt="ABBATECH" style={{ width: 120 }} />
           </div>
 
           <h1 className="text-3xl font-black text-white tracking-tight">
