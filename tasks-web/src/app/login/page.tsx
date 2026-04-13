@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
-import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 
 export default function LoginPage() {
@@ -55,7 +54,8 @@ export default function LoginPage() {
         {/* HEADER */}
         <div className="text-center mb-10">
           <div className="inline-block p-4 bg-white/10 rounded-2xl mb-4 backdrop-blur-sm border border-white/20">
-            <span className="text-4xl">🚀</span>
+            {/* <span className="text-4xl">🚀</span> */}
+            <img src="/taskflow/logov2.png" alt="ABBATECH" style={{ width: 120, height: 'auto' }}/>
           </div>
 
           <h1 className="text-3xl font-black text-white tracking-tight">
@@ -113,20 +113,27 @@ export default function LoginPage() {
           )}
 
           {/* BUTTON */}
-          <Button
+          <button
             type="submit"
             className="
-              btn-blue
               w-full
               h-12
-              text-lg
-              shadow-xl
-              shadow-black/40
+              px-4
+              py-2
+              bg-blue-500/10
+              hover:bg-blue-500/20
+              text-blue-400
+              text-sm
+              font-bold
+              border
+              border-blue-500/20
+              rounded-xl
             "
-            isLoading={loading}
+            style={{ fontWeight: 700, fontSize: 14 }}
+            disabled={loading}
           >
-            Entrar no Sistema
-          </Button>
+            {loading ? 'Entrando...' : 'Entrar no Sistema'}
+          </button>
 
         </form>
 
