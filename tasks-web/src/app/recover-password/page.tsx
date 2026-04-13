@@ -21,7 +21,7 @@ export default function RecoverPasswordPage() {
       await api.post("/auth/recover", { email });
 
       setSuccess("Se o e-mail existir, enviaremos instruções de recuperação.");
-    } catch (err: any) {
+    } catch {
       setError("Erro ao tentar recuperar senha.");
     } finally {
       setLoading(false);
