@@ -123,7 +123,7 @@ export default function Dashboard() {
       }
       setIsModalOpen(false);
       fetchData();
-    } catch (err) {
+    } catch {
       alert('Erro ao salvar tarefa');
     }
   };
@@ -135,7 +135,7 @@ export default function Dashboard() {
         await api.delete(`/tasks/${editingTask.id}`);
         setIsModalOpen(false);
         fetchData();
-      } catch (err) {
+      } catch {
         alert('Erro ao excluir tarefa');
       }
     }
