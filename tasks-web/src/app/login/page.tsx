@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { Input } from '@/components/Input';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [login, setLogin] = useState('');
@@ -72,7 +73,7 @@ export default function LoginPage() {
 
           <Input
             label="Usuário ou E-mail"
-            placeholder="felipe"
+            placeholder="Usuário ou E-mail"
             className="
               input
               bg-white/5
@@ -140,9 +141,9 @@ export default function LoginPage() {
         {/* FOOTER */}
         <p className="text-center mt-8 text-indigo-100/40 text-xs font-medium">
           Esqueceu sua senha?{' '}
-          <a href="/recover-password" className="text-white hover:underline">
+          <Link href="/recover-password" className="text-white hover:underline">
             Recuperar acesso
-          </a>
+          </Link>
         </p>
 
       </div>
