@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import api from '@/lib/api';
+import Link from 'next/link';
 
 export default function RecoverPasswordPage() {
   const [email, setEmail] = useState("");
@@ -111,9 +112,9 @@ export default function RecoverPasswordPage() {
         {/* FOOTER */}
         <p className="text-center mt-8 text-indigo-100/40 text-xs font-medium">
           Lembrou a senha?{" "}
-          <a href="/login" className="text-white hover:underline">
+          <Link href="/login" className="text-white hover:underline">
             Voltar para login
-          </a>
+          </Link>
         </p>
 
       </div>
