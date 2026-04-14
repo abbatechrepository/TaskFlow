@@ -99,4 +99,4 @@ next-env.d.ts
 # yarn.lock
 # pnpm-lock.yaml
 
-backup-tasks.sql
+backup-tasks.sqlnginx/
