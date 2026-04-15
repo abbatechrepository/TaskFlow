@@ -23,6 +23,7 @@ export default function Dashboard() {
     status: 'Aguardando aceitação',
     due_date: '',
     assigneeIds: [] as number[],
+    branch: ''
   });
 
   const router = useRouter();
@@ -99,6 +100,7 @@ export default function Dashboard() {
         assigneeIds: Array.isArray(task.assigneeIds)
           ? task.assigneeIds.map((id: number | string) => Number(id))
           : [],
+        branch: task.branch
       });
     } else {
       setEditingTask(null);
@@ -108,6 +110,7 @@ export default function Dashboard() {
         status: 'Aguardando aceitação',
         due_date: '',
         assigneeIds: [],
+        branch: task.branch
       });
     }
     setIsModalOpen(true);
@@ -355,7 +358,14 @@ export default function Dashboard() {
               ))}
             </select>
           </div>
-
+          <Input
+            label="Branch"
+            placeholder="Ex: nome_branch_tarefa"
+            className="bg-slate-800/50 border-white/5 text-white"
+            value={formData.branch}
+            onChange={e => setFormData({...formData, branch: e.target.value})}
+            required
+          />
           <div style={{ display: 'flex', gap: 12, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 8 }}>
             <button type="submit" className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20" style={{ flex: 1, fontWeight: 700, fontSize: 14 }}>Salvar Alterações</button>
             {editingTask && (
