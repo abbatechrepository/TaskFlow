@@ -80,7 +80,8 @@ export const Navbar: React.FC = () => {
 
         <div className="flex items-center gap-8">
           <Link href="/" className="text-xl font-black text-white tracking-tight">
-            TaskFlow - <span className="text-blue-500">Dashboard</span>
+            { /* TaskFlow - <span className="text-blue-500">Dashboard</span> */ }
+            <img src="/taskflow/logov3.png" alt="ABBATECH" style={{ width: 200 }} />
           </Link>
         </div>
         
