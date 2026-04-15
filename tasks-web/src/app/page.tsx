@@ -110,7 +110,7 @@ export default function Dashboard() {
         status: 'Aguardando aceitação',
         due_date: '',
         assigneeIds: [],
-        branch: task.branch
+        branch: ''
       });
     }
     setIsModalOpen(true);
@@ -201,7 +201,7 @@ export default function Dashboard() {
              <button
                type="button"
                onClick={() => handleOpenModal()}
-               className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20"
+               className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-all text-sm font-bold border border-blue-500/20 cursor-pointer"
                style={{ fontWeight: 700, fontSize: 14 }}
              >
                + Nova
