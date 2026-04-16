@@ -70,7 +70,7 @@ export default function Dashboard() {
       const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesStatus =
-        filterStatus === 'Todos status' ||
+        (filterStatus === 'Todos status' && task.status !== 'Concluída')   ||
         (filterStatus === 'Atrasada' && isOverdue(task)) ||
         task.status === filterStatus;
 
