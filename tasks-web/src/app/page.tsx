@@ -70,9 +70,10 @@ export default function Dashboard() {
       const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesStatus =
-        filterStatus === 'Todos status' ||
+        (filterStatus === 'Todos status' && task.status !== 'Concluída') ||
         (filterStatus === 'Atrasada' && isOverdue(task)) ||
-        task.status === filterStatus;
+        (filterStatus === 'Concluída' && task.status === 'Concluída') ||
+        (filterStatus !== 'Todos status' && filterStatus !== 'Atrasada' && filterStatus !== 'Concluída' && task.status === filterStatus && task.status !== 'Concluída');
 
       const matchesDev =
         filterDev === 'Todos devs' ||
@@ -154,7 +155,7 @@ export default function Dashboard() {
     <div className="space-y-8 pb-20 animate-fade-in">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total" value={stats?.total} icon="📋" isActive={filterStatus === 'Todos status'} onClick={() => setFilterStatus('Todos status')} />
+        <StatCard title="Total" value={tasks.filter(task => task.status !== 'Concluída').length} icon="📋" isActive={filterStatus === 'Todos status'} onClick={() => setFilterStatus('Todos status')} />
         <StatCard title="Em andamento" value={stats?.inProgress} icon="🔵" isActive={filterStatus === 'Em andamento'} onClick={() => setFilterStatus(filterStatus === 'Em andamento' ? 'Todos status' : 'Em andamento')} />
         <StatCard title="Atrasadas" value={stats?.overdue} icon="🔴" isActive={filterStatus === 'Atrasada'} onClick={() => setFilterStatus(filterStatus === 'Atrasada' ? 'Todos status' : 'Atrasada')} />
         <StatCard title="Concluídas" value={stats?.done} icon="🟢" isActive={filterStatus === 'Concluída'} onClick={() => setFilterStatus(filterStatus === 'Concluída' ? 'Todos status' : 'Concluída')} />
