@@ -87,15 +87,24 @@ export const Navbar: React.FC = () => {
         
         <div className="flex items-center gap-4">
 
-          {/* 🔥 Mostrar só se for admin */}
           {isAdmin && (
-            <Link
-              href="/admin/users"
-              className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20"
-              style={{ fontWeight: 700, fontSize: 14 }}
-            >
-              Gerenciar Usuários
-            </Link>
+            <>
+              <Link
+                href="/admin/projects"
+                className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20"
+                style={{ fontWeight: 700, fontSize: 14 }}
+              >
+                Gerenciar Projetos
+              </Link>
+
+              <Link
+                href="/admin/users"
+                className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20"
+                style={{ fontWeight: 700, fontSize: 14 }}
+              >
+                Gerenciar Usuários
+              </Link>
+            </>
           )}
 
           <div className="h-8 w-px bg-white/10 mx-2"></div>

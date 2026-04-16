@@ -1,19 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { TaskPayloadDto } from './dto/task.dto';
+import type { TaskPayloadDto } from './dto/task.dto';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get('dashboard')
-  getDashboard() {
-    return this.tasksService.getDashboard();
+  getDashboard(@Query('projectId') projectId?: string) {
+    return this.tasksService.getDashboard(projectId ? +projectId : undefined);
   }
 
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(@Query('projectId') projectId?: string) {
+    return this.tasksService.findAll(projectId ? +projectId : undefined);
   }
 
   @Post()
