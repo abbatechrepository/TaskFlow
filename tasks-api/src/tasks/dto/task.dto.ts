@@ -8,4 +8,5 @@ export type TaskPayloadDto = {
   answer?: string | null;
   assigneeIds?: number[];
   branch?: string;
+  projectId?: number | null;
 };
