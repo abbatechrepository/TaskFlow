@@ -94,7 +94,8 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = getSessionUser();
+
     if (!user) {
       router.push('/login');
       return;
