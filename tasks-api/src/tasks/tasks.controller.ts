@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import type { TaskPayloadDto } from './dto/task.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { UploadedFiles, UseInterceptors } from '@nestjs/common';
 
 @Controller('tasks')
 export class TasksController {
@@ -17,13 +19,22 @@ export class TasksController {
   }
 
   @Post()
-  create(@Body() createTaskDto: TaskPayloadDto) {
-    return this.tasksService.create(createTaskDto);
+  @UseInterceptors(FilesInterceptor('files'))
+  create(
+    @Body() createTaskDto: TaskPayloadDto,
+    @UploadedFiles() files: any[],
+  ) {
+    return this.tasksService.create(createTaskDto, files);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: TaskPayloadDto) {
-    return this.tasksService.update(+id, updateTaskDto);
+  @UseInterceptors(FilesInterceptor('files'))
+  update(
+    @Param('id') id: string, 
+    @Body() updateTaskDto: TaskPayloadDto, 
+    @UploadedFiles() files?: any[]
+  ) {
+    return this.tasksService.update(+id, updateTaskDto, files);
   }
 
   @Delete(':id')

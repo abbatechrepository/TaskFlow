@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { TaskPayloadDto } from './dto/task.dto';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class TasksService {
@@ -167,14 +169,39 @@ export class TasksService {
     return tasks.map((task) => this.mapTask(task));
   }
 
-  async create(data: TaskPayloadDto) {
+  private saveFiles(files?: any[]): string[] {
+    if (!files || files.length === 0) return [];
+
+    const uploadDir = path.resolve('public/uploads');
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const filePaths: string[] = [];
+
+    files.forEach((file) => {
+      const fileName = `${Date.now()}-${Math.random()}-${file.originalname}`;
+      const fullPath = path.join(uploadDir, fileName);
+
+      fs.writeFileSync(fullPath, file.buffer);
+
+      filePaths.push(`/uploads/${fileName}`);
+    });
+
+    return filePaths;
+  }
+
+  async create(data: TaskPayloadDto, files?: any[]) {
     const { due_date, assigneeIds, projectId, ...rest } = data;
     const normalizedAssigneeIds = this.normalizeAssigneeIds(assigneeIds);
     const project = await this.ensureProjectExists(projectId);
+    const filePaths = this.saveFiles(files);
 
     const task = await this.prisma.task.create({
       data: {
         ...rest,
+        files: filePaths,
         due_date: due_date ? new Date(due_date) : null,
         project: {
           connect: { id: project.id },
@@ -210,15 +237,38 @@ export class TasksService {
     return this.mapTask(task);
   }
 
-  async update(id: number, data: TaskPayloadDto) {
+  async update(id: number, data: TaskPayloadDto, files?: any[]) {
+    const rawExisting =
+      (data as any)['existingFiles'] ||
+      (data as any)['existingFiles[]'];
+
+    delete (data as any).existingFiles;
+    delete (data as any)['existingFiles[]'];
+
     const { due_date, assigneeIds, projectId, ...rest } = data;
     const normalizedAssigneeIds = this.normalizeAssigneeIds(assigneeIds);
     const project = await this.ensureProjectExists(projectId);
+
+    let existingFilesArray: string[] = [];
+
+    if (rawExisting) {
+      existingFilesArray = Array.isArray(rawExisting)
+        ? rawExisting
+        : String(rawExisting)
+            .split(',')
+            .map((f) => f.trim())
+            .filter(Boolean);
+    }
+
+    const newFilePaths = this.saveFiles(files);
+    
+    const filePaths = [...existingFilesArray, ...newFilePaths];
 
     const task = await this.prisma.task.update({
       where: { id },
       data: {
         ...rest,
+        files: JSON.stringify(filePaths),
         due_date: due_date ? new Date(due_date) : null,
         project: {
           connect: { id: project.id },
