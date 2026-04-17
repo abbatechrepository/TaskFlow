@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
+import { getSessionUser } from '@/lib/session';
 
 type Project = {
   id: number;
@@ -91,7 +92,8 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = getSessionUser();
+
     if (!user) {
       router.push('/login');
       return;

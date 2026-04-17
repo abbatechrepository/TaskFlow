@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { TasksService } from './tasks.service';
 import type { TaskPayloadDto } from './dto/task.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}

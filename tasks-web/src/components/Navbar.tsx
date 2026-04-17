@@ -4,60 +4,60 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import {
+  AUTH_SESSION_EVENT,
+  clearSession,
+  getSessionToken,
+  getSessionUser,
+  type SessionUser,
+  updateSessionUser,
+} from '@/lib/session';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<SessionUser | null>(null);
 
   useEffect(() => {
     const syncUser = () => {
-      const storedUser = localStorage.getItem('user');
-
-      if (!storedUser) {
-        setUser(null);
-        return;
-      }
-
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        setUser(null);
-      }
+      setUser(getSessionUser());
     };
 
     syncUser();
-    window.addEventListener('storage', syncUser);
     window.addEventListener('focus', syncUser);
+    window.addEventListener(AUTH_SESSION_EVENT, syncUser);
 
     return () => {
-      window.removeEventListener('storage', syncUser);
       window.removeEventListener('focus', syncUser);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncUser);
     };
   }, [pathname]);
 
   useEffect(() => {
     const refreshSession = async () => {
-      const token = localStorage.getItem('token');
+      const token = getSessionToken();
+
       if (!token) return;
 
       try {
         const res = await api.get('/users/me');
         if (res.data) {
-          localStorage.setItem('user', JSON.stringify(res.data));
+          updateSessionUser(res.data);
           setUser(res.data);
         }
       } catch (error) {
         console.error('Erro ao sincronizar sessão do usuário', error);
+        clearSession();
+        router.replace('/login');
       }
     };
 
-    refreshSession();
-  }, [pathname]);
+    void refreshSession();
+  }, [pathname, router]);
 
   const handleLogout = () => {
-    localStorage.clear();
+    clearSession();
     router.push('/login');
   };
 
