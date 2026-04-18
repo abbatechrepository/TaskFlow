@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
-import { getSessionUser } from '@/lib/session';
+import { FileUpload } from '@/components/FileUpload';
 
 type Project = {
   id: number;
@@ -24,6 +24,7 @@ type Task = {
   branch?: string | null;
   projectId?: number | null;
   project?: Project | null;
+  files?: string[] | string;
 };
 
 export default function Dashboard() {
@@ -47,6 +48,7 @@ export default function Dashboard() {
     assigneeIds: [] as number[],
     branch: '',
     projectId: '',
+    files: [] as (File | string)[],
   });
 
   const router = useRouter();
@@ -151,6 +153,17 @@ export default function Dashboard() {
           : [],
         branch: task.branch || '',
         projectId: task.projectId ? String(task.projectId) : '',
+        files: task.files
+        ? (typeof task.files === 'string'
+          ? (() => {
+            try {
+              return JSON.parse(task.files);
+            } catch {
+              return [];
+            }
+          })()
+      : task.files)
+        : [],
       });
     } else {
       setEditingTask(null);
@@ -162,6 +175,7 @@ export default function Dashboard() {
         assigneeIds: [],
         branch: '',
         projectId: '',
+        files: [] as (File | string)[]
       });
     }
     setIsModalOpen(true);
@@ -180,11 +194,38 @@ export default function Dashboard() {
       projectId: Number(formData.projectId),
     };
 
+    const form = new FormData();
+
+    Object.entries(payload).forEach(([key, value]) => {
+      if (key === 'files') return;
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          form.append(key, String(v));
+        });
+      } else {
+        form.append(key, String(value));
+      }
+    });
+
+    formData.files.forEach((file) => {
+      if (file instanceof File) {
+        form.append('files', file);
+      }
+    });
+
+    const existingFiles = formData.files.filter(
+      (file) => typeof file === 'string'
+    );
+
+    existingFiles.forEach((file) => {
+      form.append('existingFiles[]', file);
+    });
+
     try {
       if (editingTask) {
-        await api.patch(`/tasks/${editingTask.id}`, payload);
+        await api.patch(`/tasks/${editingTask.id}`, form);
       } else {
-        await api.post('/tasks', payload);
+        await api.post('/tasks', form);
       }
       setIsModalOpen(false);
       fetchData(selectedProjectId);
@@ -504,6 +545,10 @@ export default function Dashboard() {
             placeholder="Detalhes..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          />
+          <FileUpload
+            files={formData.files}
+            onChange={(files) => setFormData({ ...formData, files })}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">

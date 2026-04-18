@@ -36,6 +36,7 @@ model Task {
   branch      String?        @db.VarChar(100)
   project_id  Int?
   project     Project?       @relation(fields: [project_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  files       Json?
 
   @@map("tasks")
 }

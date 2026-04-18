@@ -31,7 +31,7 @@ services:
     volumes:
       - ./tasks-api:/app
       - node_modules:/app/node_modules
-    command: sh -c "npm install && npx prisma generate && npx prisma db push && npm run start:dev"
+    command: sh -c "npm install && npx prisma generate && npx prisma db push --accept-data-loss && npm run start:dev"
     restart: always
     healthcheck:
       test:

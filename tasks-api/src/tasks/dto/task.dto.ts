@@ -9,4 +9,5 @@ export type TaskPayloadDto = {
   assigneeIds?: number[];
   branch?: string;
   projectId?: number | null;
+  files?: string;
 };
