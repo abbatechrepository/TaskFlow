@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { AUTH_SESSION_EVENT, hasActiveSession } from '@/lib/session';
+import { Footer } from './Footer';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -63,6 +64,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <main className="p-4 md:p-8 animate-fade-in max-w-7xl mx-auto w-full">
         {children}
       </main>
+      <Footer />
     </div>
   );
 }

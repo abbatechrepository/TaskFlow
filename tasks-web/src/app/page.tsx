@@ -6,6 +6,7 @@ import api from '@/lib/api';
 import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
 import { FileUpload } from '@/components/FileUpload';
+import { getSessionUser } from '@/lib/session';
 
 type Project = {
   id: number;
@@ -200,7 +201,7 @@ export default function Dashboard() {
       if (key === 'files') return;
       if (Array.isArray(value)) {
         value.forEach((v) => {
-          form.append(key, String(v));
+          form.append(`${key}[]`, String(v));
         });
       } else {
         form.append(key, String(value));
