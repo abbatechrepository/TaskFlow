@@ -7,7 +7,12 @@ export function Footer() {
         
         {/* Logo / Nome */}
         <div className="text-sm text-slate-400 font-bold tracking-tight">
-          AbbaTech © {new Date().getFullYear()}
+          <Link
+            href="/"
+            className="text-slate-400 hover:text-white transition-colors"
+          >
+            AbbaTech
+          </Link> © {new Date().getFullYear()}
         </div>
 
         {/* Links */}
@@ -36,7 +41,10 @@ export function Footer() {
 
         {/* Extra */}
         <div className="text-xs text-slate-500">
-          Feito com ⚡
+          <Link href="/" className="text-xl font-black text-white tracking-tight">
+            { /* TaskFlow - <span className="text-blue-500">Dashboard</span> */ }
+            <img src="/taskflow/logov3.png" alt="ABBATECH" style={{ width: 150 }} />
+          </Link>
         </div>
       </div>
     </footer>
